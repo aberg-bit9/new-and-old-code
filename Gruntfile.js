@@ -36,6 +36,20 @@ module.exports = function(grunt) {
     },
     usemin: {
       html: 'build/index.html'
+    },
+    shell: {
+      webpack: {
+        command: './v2/node_modules/.bin/webpack --config ./v2/webpack.config.js --context ./v2 --output-path ./v2/build -p'
+      }
+    },
+    copy: {
+      v2: {
+        expand: true,
+        src: 'v2/build/*',
+        dest: 'build/v2/',
+        flatten: true,
+        filter: 'isFile',
+      },
     }
   });
 
@@ -46,6 +60,8 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-cssmin');
   grunt.loadNpmTasks('grunt-usemin');
+  grunt.loadNpmTasks('grunt-shell');
+  grunt.loadNpmTasks('grunt-contrib-copy');
 
   grunt.registerTask('default', [
     'configureProxies:server', 
@@ -58,7 +74,9 @@ module.exports = function(grunt) {
     'concat:generated',
     'cssmin:generated',
     'uglify:generated',
-    'usemin'
+    'usemin',
+    'shell:webpack',
+    'copy:v2'
   ]);
 
 }
